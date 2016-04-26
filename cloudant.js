@@ -112,6 +112,16 @@ function Cloudant(credentials, callback) {
                       body: query}, callback);
     };
 
+    var geo = function(ddoc, viewName, querystring, callback) {
+      var viewPath = encodeURIComponent(db) +
+          '/_design/' + encodeURIComponent(ddoc) +
+          '/_geo/' + encodeURIComponent(viewName);
+      nano.request({
+        path: viewPath + querystring,
+        method: "get"
+      }, callback);
+    };
+
     // add Cloudant special functions
     var obj = nano._use(db);
     obj.get_security = get_security;
@@ -119,6 +129,7 @@ function Cloudant(credentials, callback) {
     obj.index = index;
     obj.index.del = index_del;
     obj.find = find;
+    obj.geo = geo;
 
     return obj;
   };
